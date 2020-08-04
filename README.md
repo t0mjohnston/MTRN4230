@@ -1,3 +1,10 @@
+=======
+# MTRN4230
+MTRN4230 - Robotics- T2 2020 UNSW
+
+Contributors: Agnendra Singh, Jun Moey, Jordan Rockoff, Edward Lee, Adam Temesvary, Adrian Hayler, Thomas Johnston
+
+# Original Readme as Follows
 ### Implementation of UR5 pick and place in ROS-Gazebo with a USB cam and vacuum grippers. 
 <p align="center">
 <img src="https://github.com/lihuang3/ur5_notebook/blob/master/media/demo1.gif" width="400">

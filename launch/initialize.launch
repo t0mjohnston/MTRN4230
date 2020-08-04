@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <launch>
   <param name="red_box_path" type="str" value="$(find ur5_notebook)/urdf/red_box.urdf"/>
+  <param name="blue_box_path" type="str" value="$(find ur5_notebook)/urdf/blue_box.urdf"/>
+  <param name="yellow_box_path" type="str" value="$(find ur5_notebook)/urdf/yellow_box.urdf"/>
+  <param name="red_cyl_path" type="str" value="$(find ur5_notebook)/urdf/red_cylinder.urdf"/>
+  <param name="blue_cyl_path" type="str" value="$(find ur5_notebook)/urdf/blue_cylinder.urdf"/>
+  <param name="yellow_cyl_path" type="str" value="$(find ur5_notebook)/urdf/yellow_cylinder.urdf"/>
 
   <arg name="limited" default="true"/>
   <arg name="paused" default="false"/>
@@ -40,7 +45,12 @@
 
   <!-- spawn the conveyor_belt in gazebo -->
   <node name="spawn_conveyor_belt" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_notebook)/urdf/conveyor_belt.urdf -urdf -model conveyor_belt" />
-  <!-- spawn the conveyor_belt in gazebo -->
+  <!-- spawn the stereo camera (kinect_ros) in gazebo -->
+  <!-- note: need to spawn elevated, optional +45-90 deg pitch -->
+  <node name="spawn_kinect" pkg="gazebo_ros" type="spawn_model" args="-database kinect_ros -gazebo -model kinect_ros -x 0.0 -y -0.0 -z 1.0 -R 0.00 -P 1.5708 -Y 1.5708" />
+  
+
+  <!-- spawn the bin in gazebo -->
   <node name="bin" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_notebook)/urdf/bin.urdf -urdf -model bin -y 0.8 -x -0.5 -z 0.05" />
   <!-- the red blocks spawner node -->
   <node name="blocks_spawner" pkg="ur5_notebook" type="blocks_spawner" output="screen" />
@@ -52,6 +62,9 @@
   <node name="ur5_vision" pkg="ur5_notebook" type="ur5_vision.py" output="screen" />
   <node name="ur5_mp" pkg="ur5_notebook" type="ur5_mp.py" output="screen" />
   <node name="ur5_gripper" pkg="ur5_notebook" type="ur5_gripper.py" output="screen"/>
+  
+  <!-- message node -->
+  <node name="ur5_comms_vision" pkg="ur5_notebook" type="ur5_comms_vision.py" output="screen"/>
   <!-- for ros control to be used with scara robot -->
 <!--   <param name="/scara_robot_left/robot_description" textfile="$(find two_scara_collaboration)/urdf/scara_robot_left.urdf" /> -->
 
