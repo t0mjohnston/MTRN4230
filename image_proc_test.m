@@ -1,12 +1,14 @@
 kinectImage =  imread("Sample Image 1.png");
-colourArg = 'blue';
-shapeArg = 'circ';
+colourArg = 'yellow';
+shapeArg = 'rect';
 
 centroid = processImage(kinectImage, colourArg, shapeArg);
 
 if strcmp(centroid,'')
    disp('Error! Specified colour and or shape not present')
+   
 end
+
 
 % colourMask = createMaskHSV(kinectImage,colourArg);
 % colourAndShapeMask = createShapeMask(colourMask, shape);

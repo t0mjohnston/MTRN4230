@@ -11,18 +11,18 @@
 function centroid = processImage(kinectImage, colourArg, shapeArg)    
     [colourMask,~] = createMaskHSV(kinectImage,colourArg);
     colourAndShapeMask = createShapeMask(colourMask, shapeArg);
-%     imshow(colourAndShapeMask);
 
     centroid = findObjectCentroidsFromMask(colourAndShapeMask);
-    centroid(1) = round(centroid(1));
-    centroid(2) = round(centroid(2));
 
     if ~strcmp(centroid,'')
 %         showObjectAndCentroid(kinectImage,centroid);
         centroid(1) = round(centroid(1));
         centroid(2) = round(centroid(2));
     end
+    
+%%%%% Uncomment below line to show image and chosen centroid %%%%% 
 %     showObjectAndCentroid(kinectImage, centroid)
+
 end
 
 function centroid = findObjectCentroidsFromMask(colourAndShapeMask)
