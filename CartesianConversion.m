@@ -2,13 +2,13 @@
 %z5160388
 
 %Interpret from centroids ( camera found ) the XYZ of the objects in the simulation
-function [fx,fy,fz]=CartesianConversion(x_im,y_im)
+function [finalx,finaly,fiz]=CartesianConversion(x_im,y_im)
 %modifiable Vals
 s=0; %zero skew
-f=176.9; %(mm) %focal length of Kinect Camera
-sx=100; %pixel width (mm)
-sy=3000; %pixel heigh (mm)
-Z=196; %(mm) depth to table objects are approx 0.04 to 0.05m
+f=174.4; %(mm) %focal length of Kinect Camera
+sx=10; %pixel width (mm)
+sy=10; %pixel heigh (mm)
+Z=280; %(mm) depth to table objects are approx 0.04 to 0.05m    196
 cx=240; %in pixels
 cy=320;
 
@@ -43,9 +43,32 @@ cameraX=0;
 cameraY=0;
 cameraZ=1000; %1 metre above ground
 
-fx=(cameraX-X)/1000;
-fy=(cameraY-Y)/2600;
-fz=(cameraZ-Z)/1000; 
+fix=(cameraX-X)/1000;
+fiy=(cameraY-Y)/2800;
+fiz=(cameraZ-Z)/1000; 
 %final_in_metres
+x_p=[-0.2,-0.075,0.05,.175];
+y_p=[.225,.1,-0.025,-0.15];
+x_i=[173,265,356,447];
+y_i=[74,165,257,348];
+
+kappa=22;
+zappa=22;
+index=1;
+indeyy=1;
+for k=1:1:4
+    if kappa > abs(x_im-x_i(k))
+        kappa=abs(x_im-x_i(k));
+        index=k;
+    end
+    if zappa > abs(y_im-y_i(k))
+        zappa= abs(y_im-y_i(k));
+        indeyy=k;
+    end
+end
+
+
+finalx=x_p(index);
+finaly=y_p(indeyy);
 
 end
