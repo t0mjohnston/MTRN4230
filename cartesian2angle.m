@@ -2,7 +2,7 @@
 close all; clear variables; clc;
 
 %Cartesian coordinates
-goalPos = [-0.25,0.5,0.7]; %X,Y,Z
+goalPos = [-0.25,0.5,0.7+0.09465]; %X,Y,Z
 
 robot = loadrobot('universalUR5');
 showdetails(robot);
