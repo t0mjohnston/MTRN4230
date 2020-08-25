@@ -10,15 +10,15 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 import rospy
 import sys
 
-wp1 = float(sys.argv[1])
+'''wp1 = float(sys.argv[1])
 wp2 = float(sys.argv[2])
 wp3 = float(sys.argv[3])
 wp4 = float(sys.argv[4])
 wp5 = float(sys.argv[5])
-wp6 = float(sys.argv[6])
+wp6 = float(sys.argv[6])'''
 
 
-waypoints = [[0.0, 0, 0, 0, 0, 0], [wp1,wp2,wp3,wp4,wp5,wp6]]
+waypoints = [[0.0, -1.44, 1.4, 0.6, 0, -0.33], [0,0,0,0,0,0]]
 
 def main():
 

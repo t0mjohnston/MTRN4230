@@ -11,9 +11,9 @@ from std_msgs.msg import Bool
 from std_srvs.srv import Empty
 
 def gripper_status(msg):
+    # print('gripper status = {}'.format(msg.data))
     if msg.data:
         return True
-        # print('gripper status = {}'.format(msg.data))
 
 def gripper_on():
     # Wait till the srv is available
@@ -206,8 +206,34 @@ def gripper8_off():
         print "Service call failed: %s" % e
 
 def trigger(msg):
+    print("Gripper message triggered")
     gripper_trigger = msg.flag2
+    # gripper_trigger = gripper_status(msg); 
     if gripper_trigger:
+        gripper_on()
+        '''gripper1_on()
+        gripper2_on()
+        gripper3_on()
+        gripper4_on()
+        gripper5_on()
+        gripper6_on()
+        gripper7_on()
+        gripper8_on()'''
+
+    else:
+        gripper_off()
+        '''gripper1_off()
+        gripper2_off()
+        gripper3_off()
+        gripper4_off()
+        gripper5_off()
+        gripper6_off()
+        gripper7_off()
+        gripper8_off()'''
+
+def trigger_separate(msg): 
+    if msg.data: 
+        print("Gripper turned on")
         gripper_on()
         gripper1_on()
         gripper2_on()
@@ -217,8 +243,8 @@ def trigger(msg):
         gripper6_on()
         gripper7_on()
         gripper8_on()
-
-    else:
+    else: 
+        print("Gripper turned off")
         gripper_off()
         gripper1_off()
         gripper2_off()
@@ -228,11 +254,13 @@ def trigger(msg):
         gripper6_off()
         gripper7_off()
         gripper8_off()
-       
 
 rospy.init_node("ur5_gripper", anonymous=False)
 
 gripper_status_sub = rospy.Subscriber('/ur5/vacuum_gripper/grasping', Bool, gripper_status, queue_size=1)
+# gripper_status_sub = rospy.Subscriber('/ur5/vacuum_gripper/grasping', Bool, trigger, queue_size=1)
+
+gripper_command_sub = rospy.Subscriber('/gripper_on', Bool, trigger_separate, queue_size=1)
 
 cxy_sub = rospy.Subscriber('cxy1', Tracker, trigger, queue_size=1)
 
