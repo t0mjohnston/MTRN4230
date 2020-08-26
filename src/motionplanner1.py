@@ -75,9 +75,9 @@ class MoveItCartesianPath:
         wpose = deepcopy(start_pose)
 
         # Set the next waypoint to the right 0.5 meters
-        wpose.position.y += 0.1
-        wpose.position.z -= 0.2
-        wpose.position.x += 0.2
+        wpose.position.y += 0.10
+        wpose.position.z -= 0.20
+        wpose.position.x += 0.20
         waypoints.append(deepcopy(wpose))
 
         fraction = 0.0
