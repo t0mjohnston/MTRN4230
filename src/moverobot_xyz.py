@@ -121,24 +121,25 @@ def main():
                         'elbow_joint', 'wrist_1_joint', 'wrist_2_joint',
                         'wrist_3_joint']
 
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(20)
     cnt = 0
     pts = JointTrajectoryPoint()
     traj.header.stamp = rospy.Time.now()
 
     # while not rospy.is_shutdown():
-    while cnt <= len(waypoints): 
-        cnt += 1
+    while cnt < len(waypoints): 
         traj.header.stamp = rospy.Time.now()
         
         pts.positions = waypoints[cnt % num_pts]
-        pts.time_from_start = rospy.Duration(0.1*cnt) #previously 1
+        pts.time_from_start = rospy.Duration(0.001*cnt) #previously 1
 
         # Set the points to the trajectory
         traj.points = []
         traj.points.append(pts)
         # Publish the message
         pub.publish(traj)
+        cnt += 1 # put this at start of loop to return to home/original position 
+        # or leave here to compute new path to home
         rate.sleep()
 
 if __name__ == '__main__':
