@@ -10,11 +10,24 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 import rospy
 import sys
 
+wp1 = float(sys.argv[1])
+wp2 = float(sys.argv[2])
+wp3 = float(sys.argv[3])
+wp4 = float(sys.argv[4])
+wp5 = float(sys.argv[5])
+wp6 = float(sys.argv[6])
 
-def cycle(wp1,wp2,wp3,wp4,wp5,wp6,pub,pubgrip):
 
-    waypoints = [[1.79258668703901,-1.71664182898895,-1.57683370118371,-1.67722132469095,-1.57056759784320,0],[wp1+1,wp2+1,wp3+1,wp4+1,wp5+1,wp6+1],[wp1,wp2,wp3,wp4,wp5,wp6],[wp1+1,wp2+1,wp3+1,wp4+1,wp5+1,wp6+1],[0,0,0,0,0,0]]                   
-    
+
+
+def main():
+
+    rospy.init_node('send_joints')
+    waypoints = [[0.0, 0, 0, 0, 0, 0], [wp1,wp2,wp3,wp4,wp5,wp6]]
+    pub = rospy.Publisher('/arm_controller/command',
+                          JointTrajectory,
+                          queue_size=10)
+
     # Create the topic message
     traj = JointTrajectory()
     traj.header = Header()
@@ -24,16 +37,14 @@ def cycle(wp1,wp2,wp3,wp4,wp5,wp6,pub,pubgrip):
                         'wrist_3_joint']
 
     rate = rospy.Rate(1)
-    cnt = -1
+    cnt = 0
     pts = JointTrajectoryPoint()
     traj.header.stamp = rospy.Time.now()
 
-    while not (rospy.is_shutdown() or cnt>3):
+    while not rospy.is_shutdown():
         cnt += 1
-
-        traj.header.stamp = rospy.Time.now()
-        rospy.loginfo("count num %d", cnt)
-        pts.positions = waypoints[cnt%4]
+        
+        pts.positions = waypoints[1]
 
         pts.time_from_start = rospy.Duration(1.0)
 
@@ -44,16 +55,8 @@ def cycle(wp1,wp2,wp3,wp4,wp5,wp6,pub,pubgrip):
         pub.publish(traj)
         rate.sleep()
 
-        if cnt == 2:
-            pubgrip.publish(True)
-            pause(2)
-        elif cnt == 4:
-            pubgrip.publish(False)
-            pause(2)
-
-
-if __name__ == '__cycle__':
+if __name__ == '__main__':
     try:
-        cycle()
+        main()
     except rospy.ROSInterruptException:
         print ("Program interrupted before completion")
