@@ -11,6 +11,9 @@ import numpy as np
 import geometry_msgs.msg
 import moveit_msgs.msg
 
+from copy import deepcopy
+import moveit_commander
+
 from std_msgs.msg import Header
 from std_msgs.msg import Bool
 from std_srvs.srv import Empty
@@ -19,6 +22,8 @@ import rospy
 import sys
 import moverobot
 import time
+
+import moverobot_xyz 
 
 matFlag = 0;
 wp1 = 0;
@@ -41,6 +46,7 @@ def hollaback(data):
     wp1 = data.x
     wp2 = data.y
     wp3 = data.z
+    rospy.loginfo("Test: %f %f %f", wp1, wp2, wp3)
 
 def hollaback2(data):
     global wp4
@@ -86,18 +92,19 @@ def main():
         while not bool(matFlag):
             rospy.Subscriber("mat_comms",Int16,callback)
             rospy.loginfo("Waiting on Flag...")
-            time.sleep(1)
+            time.sleep(2)
             if(dumbBug): # This is a dumb bug that makes your terminal go rogue 
                 break    # unless you break the while loop. It wont let 
                          # you ctrl+C your program otherwise wtf
-
+        time.sleep(3)
         # Read data in from MATLAB
-            rospy.Subscriber("mat_out",Point,hollaback)
-            rospy.Subscriber("mat_out2",Point,hollaback2)
-
+        rospy.Subscriber("mat_out",Point,hollaback)
+        #rospy.Subscriber("mat_out2",Point,hollaback2)
+        time.sleep(5)
         # Move the robot through the three default and one variable waypoint
 
-        moverobot.cycle(wp1,wp2,wp3,wp4,wp5,wp6,pub,pubgrip)
+        #moverobot.cycle(wp1,wp2,wp3,wp4,wp5,wp6,pub,pubgrip)
+        moverobot_xyz.moveto_xyz(wp1,wp2,wp3,pub)
         #time.sleep(5) # This is to simulate the robot moving delay for testing purposes
 
         # Send flag to topic that MATLAB can restart its loop

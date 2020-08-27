@@ -23,9 +23,9 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 
 # Target positions for the arm
 # Currently hard-coded, get these from input/rostopic when ready
-arm_tx = 0.175
-arm_ty = -0.150
-arm_tz = 0.200
+arm_tx1 = 0.175
+arm_ty1 = -0.150
+arm_tz1 = 0.200
 
 arm = None
 
@@ -40,16 +40,13 @@ def moveit_cleanup():
     moveit_commander.roscpp_shutdown()
     moveit_commander.os._exit(0)
 
-def main():
+def moveto_xyz(arm_tx, arm_ty, arm_tz, pub):
 
-    rospy.init_node('send_joints')
+    #rospy.init_node('send_joints')
     rospy.on_shutdown(moveit_cleanup)
     # Initialize the move_group API
     moveit_commander.roscpp_initialize(sys.argv)
     arm = moveit_commander.MoveGroupCommander('manipulator')
-    pub = rospy.Publisher('/arm_controller/command',
-                          JointTrajectory,
-                          queue_size=10)
 
     # Get the name of the end-effector link
     end_effector_link = arm.get_end_effector_link()
@@ -74,13 +71,13 @@ def main():
     wpose = deepcopy(start_pose)
     
     # Get rid of these when you know what path you want to assign
-    arm_tx = wpose.position.x + 0.20
-    arm_ty = wpose.position.y + 0.10
-    arm_tz = wpose.position.z - 0.20
+    # arm_tx = wpose.position.x + 0.20
+    # arm_ty = wpose.position.y + 0.10
+    # arm_tz = wpose.position.z - 0.20
 
-    wpose.position.x += arm_tx
-    wpose.position.y += arm_ty
-    wpose.position.z -= arm_tz
+    wpose.position.x = arm_tx
+    wpose.position.y = arm_ty - 0.700
+    wpose.position.z = arm_tz
     waypoints.append(deepcopy(wpose))
 
     fraction = 0.0
@@ -124,7 +121,7 @@ def main():
     rate = rospy.Rate(20)
     cnt = 0
     pts = JointTrajectoryPoint()
-    traj.header.stamp = rospy.Time.now()
+    
 
     # while not rospy.is_shutdown():
     while cnt < len(waypoints): 
@@ -144,6 +141,9 @@ def main():
 
 if __name__ == '__main__':
     try:
-        main()
+        pub = rospy.Publisher('/arm_controller/command',
+                              JointTrajectory,
+                              queue_size=10)
+        move_xyz(arm_tx1, arm_ty1, arm_tz1, pub)
     except rospy.ROSInterruptException:
         print ("Program interrupted before completion")

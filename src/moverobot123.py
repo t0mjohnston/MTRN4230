@@ -4,12 +4,11 @@
 #
 
 from std_msgs.msg import Header
-import geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose
 from copy import deepcopy
 
 import rospy
 import sys
-import moveit_commander
 
 from trajectory_msgs.msg import JointTrajectory
 from trajectory_msgs.msg import JointTrajectoryPoint
@@ -21,20 +20,10 @@ wp4 = float(sys.argv[4])
 wp5 = float(sys.argv[5])
 wp6 = float(sys.argv[6])
 
-def cleanup(self):
-    rospy.loginfo("Stopping the robot")
-    # Stop any current arm movement
-    self.arm.stop()
-
-    #Shut down MoveIt! cleanly
-    rospy.loginfo("Shutting down Moveit!")
-    moveit_commander.roscpp_shutdown()
-    moveit_commander.os._exit(0)
-
 def main():
 
     rospy.init_node('send_joints')
-    rospy.on_shutdown(self.cleanup)
+
     waypoints = [[0.0, 0, 0, 0, 0, 0], [wp1,wp2,wp3,wp4,wp5,wp6]]
     pub = rospy.Publisher('/arm_controller/command',
                           JointTrajectory,
