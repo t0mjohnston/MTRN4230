@@ -81,7 +81,7 @@ def moveto_xyz(arm_tx, arm_ty, arm_tz, pub):
     waypoints.append(deepcopy(wpose))
 
     fraction = 0.0
-    maxtries = 100
+    maxtries = 1000
     attempts = 0 
     # Set the internal state to the current state
     arm.set_start_state_to_current_state()

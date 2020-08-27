@@ -48,6 +48,7 @@
   <!-- spawn the stereo camera (kinect_ros) in gazebo -->
   <!-- note: need to spawn elevated, optional +45-90 deg pitch -->
   <node name="spawn_kinect" pkg="gazebo_ros" type="spawn_model" args="-database kinect_ros -gazebo -model kinect_ros -x 0.0 -y -0.0 -z 1.0 -R 0.00 -P 1.5708 -Y 1.5708" />
+  <node name="spawn_saucepan" pkg="gazebo_ros" type="spawn_model" args="-database saucepan -gazebo -model saucepan -x -0.785 -y 0.423 -z 0.205 -R 0.000 -P 0.000 -Y -1.805" />
   
 
   <!-- spawn the bin in gazebo -->

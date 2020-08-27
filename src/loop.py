@@ -104,7 +104,20 @@ def main():
         # Move the robot through the three default and one variable waypoint
 
         #moverobot.cycle(wp1,wp2,wp3,wp4,wp5,wp6,pub,pubgrip)
-        moverobot_xyz.moveto_xyz(wp1,wp2,wp3,pub)
+        moverobot_xyz.moveto_xyz(wp1,wp2,0.234,pub)
+
+        moverobot_xyz.moveto_xyz(wp1,wp2,0.03,pub)
+        #moverobot_xyz.moveto_xyz(wp1,wp2,0.06,pub)
+
+        time.sleep(0.1)
+        pubgrip.publish(True)
+
+        moverobot_xyz.moveto_xyz(-0.51,0.2,0.234,pub)
+        moverobot_xyz.moveto_xyz(-0.51,0.2,0.07,pub)
+        time.sleep(0.2)
+        pubgrip.publish(False)
+        moverobot_xyz.moveto_xyz(-0.51,0.2,0.234,pub)
+
         #time.sleep(5) # This is to simulate the robot moving delay for testing purposes
 
         # Send flag to topic that MATLAB can restart its loop
