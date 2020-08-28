@@ -40,7 +40,7 @@ def moveit_cleanup():
     moveit_commander.roscpp_shutdown()
     moveit_commander.os._exit(0)
 
-def moveto_xyz(arm_tx, arm_ty, arm_tz, pub):
+def moveto_xyz(arm_tx, arm_ty, arm_tz, pub, rate1):
 
     #rospy.init_node('send_joints')
     rospy.on_shutdown(moveit_cleanup)
@@ -118,7 +118,7 @@ def moveto_xyz(arm_tx, arm_ty, arm_tz, pub):
                         'elbow_joint', 'wrist_1_joint', 'wrist_2_joint',
                         'wrist_3_joint']
 
-    rate = rospy.Rate(20)
+    rate = rospy.Rate(rate1)
     cnt = 0
     pts = JointTrajectoryPoint()
     
@@ -144,6 +144,6 @@ if __name__ == '__main__':
         pub = rospy.Publisher('/arm_controller/command',
                               JointTrajectory,
                               queue_size=10)
-        move_xyz(arm_tx1, arm_ty1, arm_tz1, pub)
+        move_xyz(arm_tx1, arm_ty1, arm_tz1, pub, rate1)
     except rospy.ROSInterruptException:
         print ("Program interrupted before completion")

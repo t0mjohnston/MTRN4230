@@ -96,7 +96,7 @@ def main():
             if(dumbBug): # This is a dumb bug that makes your terminal go rogue 
                 break    # unless you break the while loop. It wont let 
                          # you ctrl+C your program otherwise wtf
-        time.sleep(3)
+        time.sleep(6)
         # Read data in from MATLAB
         rospy.Subscriber("mat_out",Point,hollaback)
         #rospy.Subscriber("mat_out2",Point,hollaback2)
@@ -104,19 +104,19 @@ def main():
         # Move the robot through the three default and one variable waypoint
 
         #moverobot.cycle(wp1,wp2,wp3,wp4,wp5,wp6,pub,pubgrip)
-        moverobot_xyz.moveto_xyz(wp1,wp2,0.234,pub)
+        moverobot_xyz.moveto_xyz(wp1,wp2,0.234,pub,40)
 
-        moverobot_xyz.moveto_xyz(wp1,wp2,0.03,pub)
+        moverobot_xyz.moveto_xyz(wp1,wp2,0.028,pub,40)
         #moverobot_xyz.moveto_xyz(wp1,wp2,0.06,pub)
 
         time.sleep(0.1)
         pubgrip.publish(True)
-
-        moverobot_xyz.moveto_xyz(-0.51,0.2,0.234,pub)
-        moverobot_xyz.moveto_xyz(-0.51,0.2,0.07,pub)
+        moverobot_xyz.moveto_xyz(wp1,wp2,0.05,pub,25)
+        moverobot_xyz.moveto_xyz(-0.51,0.2,0.234,pub,40)
+        moverobot_xyz.moveto_xyz(-0.51,0.2,0.07,pub,25)
         time.sleep(0.2)
         pubgrip.publish(False)
-        moverobot_xyz.moveto_xyz(-0.51,0.2,0.234,pub)
+        moverobot_xyz.moveto_xyz(-0.51,0.2,0.234,pub,40)
 
         #time.sleep(5) # This is to simulate the robot moving delay for testing purposes
 

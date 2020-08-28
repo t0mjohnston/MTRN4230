@@ -88,16 +88,14 @@
       std::vector<std::string> objectTypePaths;  
       std::vector<std::string> object_xmlInfo; 
       std::vector<std::string>::iterator oit; 
-      
-      
-      // Count how many of each object to insert (note: need to automate this based on placement surface area)
-      std::map<std::string, int> objectTypeCt; 
-      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[0], 5)); 
-      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[1], 5)); 
-      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[2], 4)); 
-      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[3], 3)); 
-      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[4], 3)); 
-      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[5], 3)); 
+
+      /* std::vector<std::string> objectQtyVars; 
+      objectQtyVars.push_back("/red_box_qty"); 
+      objectQtyVars.push_back("/blue_box_qty"); 
+      objectQtyVars.push_back("/yellow_box_qty"); 
+      objectQtyVars.push_back("/red_cyl_qty"); 
+      objectQtyVars.push_back("/blue_cyl_qty"); 
+      objectQtyVars.push_back("/yellow_cyl_qty"); */
 
       //get file path of blocks from parameter service
       /* std::string red_box_path;
@@ -119,6 +117,15 @@
           }
           objectTypePaths.push_back(object_path); 
       }
+
+      // Count how many of each object to insert (note: need to automate this based on placement surface area)
+      std::map<std::string, int> objectTypeCt; 
+      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[0], 3)); 
+      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[1], 2)); 
+      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[2], 3)); 
+      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[3], 4)); 
+      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[4], 2)); 
+      objectTypeCt.insert(std::pair<std::string, int>(objectTypeVars[5], 2)); 
       
       /* std::ifstream red_inXml(red_box_path.c_str());
       std::stringstream red_strStream;
@@ -171,6 +178,7 @@
       float count_width = centre_x-spawn_width/2; 
       float count_length = centre_y-spawn_length/2; 
       float spawn_increment = 0.125; 
+      bool models_left = false; 
       /*
       Alternative config: 
       width = 0.5, length = 0.4; centre = (0.1, 0.0), increment = 0.125; 
@@ -196,21 +204,24 @@
                   spawn_model_req.model_name = model_name;
                   spawn_model_req.robot_namespace = model_name;
                   // spawn_model_req.model_xml = red_xmlStr; 
-                  
                   int sel_model = rand() % objectTypeCt.size(); 
-                  /* bool models_left = true; 
-                  for (size_t i = 0; i < objectTypeCt.size(); i++) { 
-                    if (objectTypeCt[objectTypeVars[i]] <= 0) {
-                        models_left = false; 
-                        break; 
-                      }
-                  } */
-                             
+                  
+                  models_left = false; 
+                  for (size_t k = 0; k < objectTypeCt.size(); k++) { 
+                    if (objectTypeCt[objectTypeVars[k]] > 0) {
+                      models_left = true; 
+                      break; 
+                    }
+                  } 
+                  if (!models_left) { 
+                      break; 
+                  }           
                   if (objectTypeCt[objectTypeVars[sel_model]] > 0) { 
                       objectTypeCt[objectTypeVars[sel_model]]--; 
                   } else { 
-                      sel_model = rand() % objectTypeCt.size(); 
-                      
+                      objectTypeCt.erase(objectTypeVars[sel_model]); 
+                      // sel_model = rand() % objectTypeCt.size(); 
+                      continue; 
                   } 
                   
                   spawn_model_req.model_xml = object_xmlInfo[sel_model]; 
@@ -223,6 +234,8 @@
                       else {
                           ROS_INFO_STREAM(model_name << " spawn failed");
                       }
+                      if (models_left) { ROS_INFO_STREAM("Models left"); }
+                      else { ROS_INFO_STREAM("Models exhausted"); } 
                   }
                   else {
                       ROS_INFO("fail in first call");
